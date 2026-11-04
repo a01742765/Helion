@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 690" role="img" aria-labelledby="title description">
+  <title id="title">Sol y paneles solares HELION</title>
+  <desc id="description">Ilustración tecnológica de paneles fotovoltaicos bajo un sol dorado y una órbita de energía turquesa.</desc>
+  <defs>
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%"><stop stop-color="#FFC862" stop-opacity=".55"/><stop offset=".48" stop-color="#F5B400" stop-opacity=".18"/><stop offset="1" stop-color="#F5B400" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sun" x1=".2" x2=".85" y1="0" y2="1"><stop stop-color="#FFDD78"/><stop offset=".48" stop-color="#FFC02C"/><stop offset="1" stop-color="#F29C0D"/></linearGradient>
+    <linearGradient id="pan" x1=".15" x2=".85" y1="0" y2="1"><stop stop-color="#1D83A8"/><stop offset=".34" stop-color="#0E507D"/><stop offset="1" stop-color="#06274B"/></linearGradient>
+    <linearGradient id="panEdge" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#45CCCB"/><stop offset="1" stop-color="#147EAC"/></linearGradient>
+    <linearGradient id="orbit" x1="0" x2="1" y1="1" y2="0"><stop stop-color="#0C6B92" stop-opacity="0"/><stop offset=".48" stop-color="#18B7B0"/><stop offset="1" stop-color="#A6F5E6"/></linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+    <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.2" fill="#9EDEDF" opacity=".2"/></pattern>
+    <clipPath id="panelClip"><path d="M 110 373 L 540 320 L 701 535 L 245 610 Z"/></clipPath>
+  </defs>
+  <rect width="790" height="690" fill="none"/>
+  <circle cx="477" cy="270" r="275" fill="url(#sunGlow)"/>
+  <circle cx="524" cy="252" r="114" fill="url(#sun)"/>
+  <circle cx="524" cy="252" r="131" fill="none" stroke="#F5B400" stroke-opacity=".22" stroke-width="1" stroke-dasharray="3 9"/>
+  <circle cx="524" cy="252" r="164" fill="none" stroke="#F5B400" stroke-opacity=".14" stroke-width="1"/>
+  <g stroke="#FFC04D" stroke-width="4" stroke-linecap="round" opacity=".65">
+    <path d="M524 109 V89 M524 415 V395 M381 252 H361 M685 252 H665 M424 152 l-14 -14 M624 352 l14 14 M624 152 l14 -14 M424 352 l-14 14"/>
+  </g>
+  <rect x="55" y="48" width="700" height="585" fill="url(#dots)" opacity=".55"/>
+  <g fill="none" stroke="#5DD5CF" stroke-width="1.8" opacity=".24">
+    <path d="M107 221 H215 V158 H280"/><path d="M82 267 H182 V298 H252"/><path d="M577 87 H669 V128 H736"/><path d="M690 426 H753 V470"/>
+    <circle cx="281" cy="158" r="4" fill="#5DD5CF"/><circle cx="252" cy="298" r="4" fill="#5DD5CF"/>
+    <circle cx="736" cy="128" r="4" fill="#5DD5CF"/><circle cx="753" cy="470" r="4" fill="#5DD5CF"/>
+  </g>
+  <ellipse cx="414" cy="578" rx="300" ry="64" fill="#020C22" opacity=".65" filter="url(#shadow)"/>
+  <path d="M 110 373 L 540 320 L 701 535 L 245 610 Z" fill="url(#pan)" stroke="url(#panEdge)" stroke-width="5"/>
+  <g clip-path="url(#panelClip)" stroke="#9AD9E7" stroke-opacity=".69" stroke-width="3">
+    <path d="M 197 350 L 337 597 M 287 338 L 432 580 M 374 328 L 522 562 M 459 315 L 612 549"/>
+    <path d="M 136 411 L 573 366 M 173 458 L 610 411 M 207 509 L 651 472 M 235 560 L 684 521"/>
+  </g>
+  <path d="M 110 373 L 540 320 L 701 535 L 245 610 Z" fill="none" stroke="#7FE8E0" stroke-width="3" stroke-opacity=".3"/>
+  <path d="M245 610 L244 630 L701 557 L701 535" fill="#061D3A" stroke="#18718E" stroke-width="2"/>
+  <path d="M 91 554 C 196 683 611 651 743 420" fill="none" stroke="#12C7B7" stroke-opacity=".22" stroke-width="18" filter="url(#glow)"/>
+  <path d="M 85 554 C 193 678 606 646 738 416" fill="none" stroke="url(#orbit)" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="738" cy="416" r="8" fill="#B7FFF0"/>
+  <circle cx="738" cy="416" r="18" fill="none" stroke="#81F4E1" stroke-opacity=".4" stroke-width="2"/>
+  <g fill="#F5B400"><circle cx="145" cy="131" r="3"/><circle cx="310" cy="65" r="2"/><circle cx="720" cy="316" r="3"/></g>
+</svg>

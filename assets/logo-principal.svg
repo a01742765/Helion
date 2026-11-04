@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="325" height="325" viewBox="15 65 325 325" role="img" aria-label="Logo HELION: sol, panel solar y órbita de energía">
+<defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC216"/><stop offset="1" stop-color="#F5B400"/></linearGradient>
+      <linearGradient id="panel" x1="0" y1="0" x2="0.8" y2="1"><stop offset="0" stop-color="#115B87"/><stop offset="1" stop-color="#0A3A66"/></linearGradient>
+      <linearGradient id="teal" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0A3A66"/><stop offset="0.45" stop-color="#18B7B0"/><stop offset="1" stop-color="#17AFA5"/></linearGradient>
+     </defs>
+   <circle cx="200" cy="185" r="62" fill="url(#gold)"/>
+   <path d="M 200 80 L 200 110" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+<path d="M 149 92 L 164 117" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+<path d="M 110 126 L 137 144" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+<path d="M 247 92 L 233 117" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+<path d="M 290 127 L 263 145" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+   <polygon points="100,184 245,184 240,265 37,265" fill="#FFFFFF"/>
+   <polygon points="100,184 153,184 128,218 74,218" fill="url(#panel)"/>
+<polygon points="158,184 197,184 171,218 132,218" fill="url(#panel)"/>
+<polygon points="201,184 245,184 242,218 176,218" fill="url(#panel)"/>
+<polygon points="72,225 124,225 95,265 37,265" fill="url(#panel)"/>
+<polygon points="130,225 169,225 150,265 100,265" fill="url(#panel)"/>
+<polygon points="174,225 242,225 240,265 155,265" fill="url(#panel)"/>
+   <path d="M 81 293 C 155 287, 255 280, 295 226 C 309 207, 311 191, 289 179 C 307 182, 318 193, 313 210 C 302 257, 231 288, 81 293 Z" fill="url(#teal)"/><text x="177" y="363" font-family="Inter,Montserrat,Arial,sans-serif" font-size="59" font-weight="800" letter-spacing="1" text-anchor="middle" fill="#0A3A66">HELION</text>
+</svg>
