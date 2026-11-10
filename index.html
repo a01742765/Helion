@@ -15,10 +15,10 @@
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./immersive-solar.css?v=20">
-  <link rel="stylesheet" href="./cotizador.css?v=21">
+  <link rel="stylesheet" href="./cotizador.css?v=22">
   <script src="./script.js" defer></script>
   <script src="./immersive-solar.js?v=20" defer></script>
-  <script src="./cotizador.js?v=21" defer></script>
+  <script src="./cotizador.js?v=22" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -216,7 +216,11 @@
             <div class="planner-panel-top"><span>01 / TUS NECESIDADES</span><strong>Dimensionamiento orientativo</strong></div>
             <div class="planner-fields">
               <label>Consumo del recibo <span>kWh / bimestre</span><input id="p-consumption" type="number" min="10" max="25000" step="10" value="600" required></label>
-              <label>Potencia del panel <span>W por módulo</span><input id="p-module-w" type="number" min="100" max="800" step="10" value="550" required></label>
+              <label>Modelo comercial del pallet <span>Automático = menor costo del pedido que cumple la meta</span><select id="p-model"><option value="auto">Recomendar automáticamente</option></select><input id="p-module-w" type="hidden" value="550"></label>
+              <label>Largo del techo despejado <span>Metros medidos sobre cubierta (sin obstáculos)</span><input id="p-roof-length" type="number" min="1" max="100" step="0.1" value="12" required></label>
+              <label>Ancho del techo despejado <span>Metros del mismo rectángulo</span><input id="p-roof-width" type="number" min="1" max="100" step="0.1" value="8" required></label>
+              <label>Margen libre por borde <span>Metros; ajustar en visita técnica, no es norma fija</span><input id="p-margin" type="number" min="0" max="5" step="0.05" value="0.40" required></label>
+              <label>Separación entre módulos <span>Metros; espacio entre módulos, no entre filas elevadas</span><input id="p-gap" type="number" min="0" max="1" step="0.01" value="0.03" required></label>
               <label>Horas solares pico <span>h/día · debes verificarlas localmente</span><input id="p-sun" type="number" min="2" max="8" step="0.1" value="4.5" required></label>
               <label>Rendimiento global <span>PR · pérdidas aproximadas</span><input id="p-pr" type="number" min="0.5" max="0.95" step="0.01" value="0.80" required></label>
               <div class="planner-conditional" id="planner-backup-fields" hidden>
@@ -225,6 +229,7 @@
                 <label id="p-days-wrap" hidden>Días de autonomía <span>días sin aporte solar</span><input id="p-offgrid-days" type="number" min="1" max="5" step="1" value="1"></label>
               </div>
             </div>
+            <p class="planner-input-note"><strong>Mide el rectángulo libre y continuo</strong> sobre la superficie del techo, descontando físicamente tragaluces, chimeneas, pasillos y zonas de sombra. Para varios paños o formas irregulares se requiere plano del techo. La calculadora prueba ambas orientaciones de módulos; no garantiza montaje ni resistencia estructural.</p>
             <p class="planner-input-note">El valor de 4.5 horas de sol y el rendimiento 0.80 son <strong>supuestos editables de demostración</strong>, no datos medidos para tu domicilio. No equivalen a una ingeniería de instalación.</p>
             <button type="submit" class="planner-compute">Calcular mi propuesta preliminar <span aria-hidden="true">↗</span></button>
             <p id="planner-error" class="planner-error" role="alert" hidden></p>
@@ -237,14 +242,20 @@
               <div><span>Producción orientativa</span><strong id="p-gen">—</strong><small>kWh / 60 días</small></div>
               <div><span>Batería aproximada</span><strong id="p-battery">—</strong><small>kWh nominales</small></div>
             </div>
+            <div class="planner-roof-snapshot"><strong>Techo y compra por pallet</strong><p id="p-roof-result">Calculando espacio disponible…</p><p id="p-pallet-result"></p></div>
             <div class="planner-energy-path" aria-label="Componentes del sistema"><span class="pep-sun">☀ <small>Paneles</small></span><b aria-hidden="true">→</b><span>▣ <small>Inversor</small></span><b aria-hidden="true">→</b><span>⌂ <small>Consumo</small></span><b aria-hidden="true" id="p-path-arrow">↔</b><span id="p-path-last">⇄ <small>Red CFE</small></span></div>
             <p id="p-overview" class="planner-overview">Los resultados son preliminares y necesitan verificación técnica.</p>
             <div class="planner-alert"><strong>El dato que debes conocer</strong><p id="p-alert">La energía sobrante puede entregarse a la red si existe un contrato de interconexión válido. Un sistema on-grid normal no garantiza energía durante apagones.</p></div>
             <a href="#p-materials-title" class="planner-link">Revisar todos los equipos y costos <span aria-hidden="true">↓</span></a>
           </div>
         </div>
+        <section class="planner-catalog cinema-reveal" aria-labelledby="p-catalog-title">
+          <div class="planner-purchase-head"><div><span class="planner-kicker">03 / COMPARADOR DE PANELES POR PALLET</span><h3 id="p-catalog-title">¿Cuál cabe en tu techo y cuánto debes comprar?</h3><p>Compara los modelos por potencia, dimensiones y precio de pallet. <strong>No se cotizan paneles sueltos</strong>: el sistema contabiliza pallets completos y muestra los módulos que sobrarían.</p></div><div class="planner-catalog-badge">Precios capturados<br>10 NOV 2026 · + IVA</div></div>
+          <div class="planner-table-wrap"><table class="planner-table planner-catalog-table"><thead><tr><th>Modelo</th><th>Precio/pallet</th><th>m²/panel</th><th>W/panel</th><th>Caben</th><th>Instalar / comprar</th><th>Resultado</th></tr></thead><tbody id="p-catalog-body"></tbody></table></div>
+          <p class="planner-input-note">La capacidad del techo es una <strong>estimación rectangular</strong>: no contempla cargas estructurales, sombras horarias, inclinación de bastidores, pasillos reglamentarios o recortes irregulares. Dimensiones de modelos referenciales pendientes de validar contra fichas técnicas específicas. Precios fotografiados, no cotizaciones actuales.</p>
+        </section>
         <div class="planner-purchase cinema-reveal" id="p-materials-panel">
-          <div class="planner-purchase-head"><div><span class="planner-kicker">03 / ALCANCE REAL DE LA INSTALACIÓN</span><h3 id="p-materials-title">Todo lo que debe incluir una cotización.</h3><p>Introduce precios unitarios <strong>recibidos de proveedores</strong> para calcular un presupuesto. HELION no inventa precios ni promete disponibilidad.</p></div><div class="planner-purchase-actions"><button type="button" id="p-download" class="planner-secondary">Descargar lista CSV</button><button type="button" id="p-print" class="planner-secondary">Imprimir / Guardar PDF</button></div></div>
+          <div class="planner-purchase-head"><div><span class="planner-kicker">04 / ALCANCE REAL DE LA INSTALACIÓN</span><h3 id="p-materials-title">Todo lo que debe incluir una cotización.</h3><p>Introduce precios unitarios <strong>recibidos de proveedores</strong> para calcular un presupuesto. HELION no inventa precios ni promete disponibilidad.</p></div><div class="planner-purchase-actions"><button type="button" id="p-download" class="planner-secondary">Descargar lista CSV</button><button type="button" id="p-print" class="planner-secondary">Imprimir / Guardar PDF</button></div></div>
           <div class="planner-table-wrap"><table class="planner-table"><thead><tr><th scope="col">Equipo o servicio</th><th scope="col">Cantidad</th><th scope="col">Precio unitario (MXN)</th><th scope="col">Importe (MXN)</th></tr></thead><tbody id="p-items"></tbody></table></div>
           <div class="planner-total"><span id="p-total-info">Sin precios capturados: cotización pendiente</span><strong id="p-total">Cotización pendiente</strong></div>
           <p class="planner-input-note">Importes capturados por el usuario: no son ofertas comerciales ni incluyen automáticamente IVA, envío, permisos, adecuaciones, garantías o mano de obra salvo que se registren. El total solo será una cotización completa cuando todos los renglones tengan precios confirmados.</p>
@@ -260,7 +271,7 @@
             <article><span>06</span><h4>Instalación y puesta en marcha</h4><p>La cotización debe contemplar visita técnica, ingeniería, instalación por personal competente, pruebas, documentación, garantías y mantenimiento.</p></article>
           </div>
         </div>
-        <div class="planner-suppliers" aria-labelledby="p-sup-title"><div><span class="planner-kicker">04 / PROVEEDORES DOCUMENTADOS</span><h3 id="p-sup-title">Solicita precios reales.</h3><p>Son distribuidores con catálogo para México. Algunos trabajan principalmente con instaladores o integradores: no representan cotizaciones emitidas por HELION.</p></div><div class="planner-supplier-grid">
+        <div class="planner-suppliers" aria-labelledby="p-sup-title"><div><span class="planner-kicker">05 / PROVEEDORES DOCUMENTADOS</span><h3 id="p-sup-title">Solicita precios reales.</h3><p>Son distribuidores con catálogo para México. Algunos trabajan principalmente con instaladores o integradores: no representan cotizaciones emitidas por HELION.</p></div><div class="planner-supplier-grid">
           <a href="https://www.exelsolar.mx/" target="_blank" rel="noopener noreferrer"><strong>Exel Solar</strong><small>Paneles, inversores, baterías, protecciones, montaje y tienda de cotizaciones</small><b>Consultar proveedor ↗</b></a>
           <a href="https://www.syscom.mx/p/syscom-solar" target="_blank" rel="noopener noreferrer"><strong>SYSCOM Solar</strong><small>Generación, conversión, almacenamiento, obra, protecciones y lista de materiales</small><b>Ver soluciones ↗</b></a>
           <a href="https://ecommerce.solar-center.mx/" target="_blank" rel="noopener noreferrer"><strong>Solar Center</strong><small>Catálogo de módulos, inversores, estructuras, almacenamiento y accesorios</small><b>Ver catálogo ↗</b></a>

@@ -1,4 +1,5 @@
-# HELION Solar — v2.1 · Cotizador didáctico y ecosistema HELION
+# HELION Solar — v2.2 · Techos y catálogo por pallet
+
 
 Landing inmersiva original HELION con capítulo de dimensionamiento preliminar, lista completa de equipos y directorio de proveedores en México. Conserva el estilo y la identidad HELION; vincula al proyecto [HELION Atlas](https://a01742765.github.io/Helion-Atlas-Electrico/).
 
@@ -29,3 +30,12 @@ Verificar las tres modalidades, cantidades y exportación. Pruebas iniciales ori
 - Aislado con 1 día autonomía: 13.07 kWh nominales y 3 módulos orientativos.
 
 **No es un proyecto constructivo ni una cotización comercial.** No se ha subido a GitHub.
+
+## Nuevo en v2.2
+
+- Selección automática o manual de uno de siete modelos comercializados por pallets.
+- Captura de largo/ancho del rectángulo despejado del techo, margen perimetral y separación.
+- Comparación de orientación horizontal/vertical y cantidad máxima que cabe (estimación, no layout de ingeniería).
+- Compra obligatoria de pallets completos, registro de sobrantes y precios por pallet (más IVA) a fecha de captura.
+- Comparador y CSV incluyen cantidades, compra mínima y advertencias.
+- Faltan fichas técnicas exactas y visita para comprobar medidas e ingeniería.

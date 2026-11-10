@@ -1,3 +1,4 @@
+import { PANEL_CATALOG, evaluateCatalog } from './catalogo-paneles.mjs';
 (() => {
   'use strict';
   const form = document.getElementById('planner-form');
@@ -6,10 +7,11 @@
   const fmt = (n, digits = 0) => Number(n).toLocaleString('es-MX', { minimumFractionDigits: digits, maximumFractionDigits: digits });
   const money = (n) => new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(n);
   const quoteInputs = new Map();
-  const maxAllowed = { 'p-consumption': 25000, 'p-module-w': 800, 'p-sun': 8, 'p-pr': 0.95, 'p-critical-w': 20000, 'p-backup-hours': 72, 'p-offgrid-days': 5 };
+  const maxAllowed = { 'p-consumption': 25000, 'p-module-w': 800, 'p-sun': 8, 'p-pr': 0.95, 'p-critical-w': 20000, 'p-backup-hours': 72, 'p-offgrid-days': 5, 'p-roof-length':100, 'p-roof-width':100, 'p-margin':5, 'p-gap':1 };
   let latestRows = [];
   let latestSummary = null;
   let latestSystem = 'on-grid';
+  PANEL_CATALOG.forEach(p=>{$('p-model').add(new Option(`${p.brand} ${p.w} W · ${p.qty} pzas/pallet`,p.id))});
 
   const getNumber = (id) => {
     const el = $(id);
@@ -22,9 +24,9 @@
   const modeText = { 'on-grid': 'Sistema interconectado', hybrid: 'Sistema híbrido', 'off-grid': 'Sistema aislado' };
   const chooseMode = () => document.querySelector('input[name="planner-mode"]:checked')?.value || 'on-grid';
 
-  function makeRows(mode, count, batteryCount, inverterKw) {
+  function makeRows(mode, count, batteryCount, inverterKw, selected) {
     const lines = [
-      ['panels', 'Panel fotovoltaico', `Módulos de potencia indicada en la calculadora; confirmar modelo y voltajes Voc/Vmp`, count, 'pieza'],
+      ['panels', `Pallet de módulos ${selected.brand} ${selected.w} W`, `${selected.model}; ${selected.qty} unidades por pallet · instalar ${count}; sobrantes ${selected.surplus}; validar Voc/Vmp y disponibilidad`, selected.pallets, 'pallet'],
       ['inverter', mode === 'on-grid' ? 'Inversor de interconexión / microinversores' : mode === 'hybrid' ? 'Inversor híbrido con salida de respaldo' : 'Inversor/cargador aislado', `1 conjunto orientativo; referencia de salida AC ≥ ${fmt(inverterKw, 1)} kW, sujeto a validación`, 1, 'conjunto'],
       ['mount', 'Estructura, rieles, anclajes y sellado', 'Para el tipo de cubierta y condiciones de viento del inmueble', 1, 'lote'],
       ['dcp', 'Protecciones y seccionamiento DC', 'Fusibles, interruptores, combinadora y SPD según topología / ficha técnica', 1, 'lote'],
@@ -110,14 +112,22 @@
     try {
       const mode = chooseMode();
       const consumption = getNumber('p-consumption');
-      const moduleW = getNumber('p-module-w');
       const sun = getNumber('p-sun');
       const pr = getNumber('p-pr');
-      // Diseño preliminar: promedio energético en 60 días, no simulación meteorológica.
-      const daily = consumption / 60;
-      const panels = Math.ceil((daily / (sun * pr)) * (1000 / moduleW));
+      const roofLength = getNumber('p-roof-length');
+      const roofWidth = getNumber('p-roof-width');
+      const margin = getNumber('p-margin');
+      const gap = getNumber('p-gap');
+      const candidates = evaluateCatalog({consumption,sun,pr,roofLength,roofWidth,margin,gap});
+      const chosenId = $('p-model').value;
+      const selected = chosenId === 'auto' ? (candidates.find(c=>c.fit>0 && c.price!==null) || candidates.find(c=>c.fit>0)) : candidates.find(c=>c.id===chosenId);
+      if (!selected || !selected.installed) throw new Error('Ningún módulo cabe en el área despejada. Revisa largo/ancho/márgenes.');
+      const panels = selected.installed;
+      const moduleW = selected.w;
+      $('p-module-w').value = moduleW;
       const kwp = panels * moduleW / 1000;
-      const produced = kwp * sun * pr * 60;
+      const produced = selected.generated;
+      // Consumo medio a 60 días, dimensiones de referencia y pedido solo por pallet.
       let criticalW = 0;
       let batteryNeeded = 0;
       let batteryModules = 0;
@@ -130,22 +140,33 @@
       // Sólo una referencia de categoría comercial, sin validar compatibilidad eléctrica de un modelo.
       const inverterKw = Math.ceil(Math.max(kwp / 1.20, criticalW / 1000) * 10) / 10;
       latestSystem = mode;
-      latestSummary = { mode, consumption, moduleW, sun, pr, panels, kwp, produced, batteryNeeded, batteryModules, inverterKw };
+      latestSummary = { mode, consumption, moduleW, sun, pr, panels, kwp, produced, batteryNeeded, batteryModules, inverterKw, selected, roofLength, roofWidth, margin, gap };
       $('p-result-title').textContent = modeText[mode];
+      const netL = Math.max(0,roofLength-2*margin),netW=Math.max(0,roofWidth-2*margin);
+      $('p-roof-result').textContent = `${fmt(netL,2)} × ${fmt(netW,2)} m útiles (${fmt(netL*netW,1)} m²). Con ${selected.brand} ${selected.w} W caben hasta ${selected.fit} paneles en orientación ${selected.orientation.toLowerCase()} y se instalarían ${panels}.`;
+      $('p-pallet-result').textContent = `Comprar ${selected.pallets} pallet(s) de ${selected.qty} paneles cada uno: ${selected.bought} adquiridos, ${selected.surplus} sobrantes. ${selected.meetsGoal?'Meta de consumo estimada cubierta.':'ATENCIÓN: el techo no permite cubrir toda la meta con este modelo.'} ${selected.price!==null?'Costo referencial de módulos '+money(selected.procurementCost)+' + IVA; sin flete ni instalación.':'Precio de pallet pendiente de proveedor.'}`;
+      const tbody=$('p-catalog-body');tbody.replaceChildren();
+      for(const c of candidates){
+        const tr=document.createElement('tr');if(c.id===selected.id)tr.className='is-recommended';
+        const fields=[`${c.brand} ${c.model} · ${c.qty}/pallet`,c.price===null?'Por cotizar':money(c.price),fmt(c.length*c.width,2),String(c.w),String(c.fit),`${c.installed} / ${c.pallets} pallet(s) · sobran ${c.surplus}`,c.fit===0?'No cabe':c.meetsGoal?'Cubre meta':'No cubre meta'];
+        fields.forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});tbody.append(tr);
+      }
       $('p-panels').textContent = fmt(panels);
       $('p-kwp').textContent = fmt(kwp, 2);
       $('p-gen').textContent = fmt(Math.round(produced));
       $('p-battery').textContent = mode === 'on-grid' ? 'No requiere' : fmt(batteryNeeded, 2);
       $('p-path-arrow').textContent = mode === 'off-grid' ? '↔' : '↔';
       $('p-path-last').innerHTML = mode === 'off-grid' ? '▤ <small>Batería</small>' : mode === 'hybrid' ? '▤ <small>Batería + red</small>' : '⇄ <small>Red CFE</small>';
-      $('p-overview').textContent = `${fmt(panels)} paneles de ${fmt(moduleW)} W suman ${fmt(kwp, 2)} kWp. La referencia de inversor es ≥ ${fmt(inverterKw, 1)} kW AC; debe definirse con la curva de cargas, características de los módulos, servicio eléctrico y fichas técnicas. La generación estimada (${fmt(Math.round(produced))} kWh/60 días) supone las horas solares y pérdidas indicadas; no garantiza ese resultado ni el ahorro en el recibo.`;
+      $('p-overview').textContent = `${fmt(panels)} paneles instalados (${selected.brand} ${selected.model}) de ${fmt(moduleW)} W suman ${fmt(kwp, 2)} kWp. La referencia de inversor es ≥ ${fmt(inverterKw, 1)} kW AC; debe definirse con la curva de cargas, características de los módulos, servicio eléctrico y fichas técnicas. La generación estimada (${fmt(Math.round(produced))} kWh/60 días) supone las horas solares y pérdidas indicadas; no garantiza ese resultado ni el ahorro en el recibo.`;
       $('p-alert').textContent = mode === 'on-grid'
         ? 'No necesitas batería para un sistema interconectado convencional. El medidor de la distribuidora permite registrar los intercambios autorizados con la red; debes tramitar interconexión y contraprestación. Sin sistema de respaldo diseñado para ello, un apagón desconecta la generación.'
         : mode === 'hybrid'
           ? `El cálculo energético exige ≈ ${fmt(batteryNeeded, 2)} kWh nominales (${batteryModules} módulos de referencia de 5.12 kWh), para la potencia y horas de cargas críticas que ingresaste. La autonomía real depende de picos, profundidad de descarga, temperatura, BMS y transferencia. La interconexión requiere el trámite correspondiente.`
           : `Se estiman ≈ ${fmt(batteryNeeded, 2)} kWh nominales (${batteryModules} módulos de referencia de 5.12 kWh) para la autonomía seleccionada. Un sistema aislado exige análisis de peor mes solar, días nublados, picos de arranque y respaldo adicional; el consumo bimestral por sí solo no basta para el diseño definitivo.`;
       $('planner-error').hidden = true;
-      drawRows(makeRows(mode, panels, batteryModules, inverterKw));
+      quoteInputs.delete('panels');
+      if (selected.price!==null) quoteInputs.set('panels',String(selected.price));
+      drawRows(makeRows(mode, panels, batteryModules, inverterKw, selected));
     } catch (error) {
       $('planner-error').textContent = error.message || 'Revisa los datos ingresados.';
       $('planner-error').hidden = false;
@@ -163,6 +184,7 @@
     });
   });
   form.addEventListener('submit', calculate);
+  $('p-model').addEventListener('change',calculate);
 
   const csvEscape = (value) => `"${String(value ?? '').replaceAll('"', '""')}"`;
   $('p-download').addEventListener('click', () => {
@@ -171,7 +193,14 @@
     const rows = [
       ['HELION Solar · Listado para solicitar cotización · NO OFERTA COMERCIAL'],
       ['Configuración', modeText[latestSystem]],
-      ['Paneles', latestSummary.panels, 'unidades'],
+      ['Modelo comercial', latestSummary.selected.model],
+      ['Compra mínima', latestSummary.selected.pallets, 'pallet(s)'],
+      ['Paneles comprados', latestSummary.selected.bought, 'unidades'],
+      ['Paneles sobrantes', latestSummary.selected.surplus, 'unidades'],
+      ['Área despejada del techo', `${latestSummary.roofLength} × ${latestSummary.roofWidth}`, 'm'],
+      ['Margen por borde', latestSummary.margin, 'm'],
+      ['Separación entre módulos', latestSummary.gap, 'm'],
+      ['Paneles instalados', latestSummary.panels, 'unidades'],
       ['Potencia fotovoltaica', latestSummary.kwp, 'kWp'],
       ['Generación supuesta en 60 días', Math.round(latestSummary.produced), 'kWh'],
       ['Almacenamiento calculado', latestSummary.batteryNeeded.toFixed(2), 'kWh nominales'],
@@ -182,7 +211,7 @@
       rows.push([r.name, r.qty, r.unit, raw, raw === '' ? '' : (Number(raw) * r.qty).toFixed(2)]);
     });
     rows.push(['', '', 'El total solo es completo si todos los precios están ingresados']);
-    rows.push(['Nota', 'No incluye precios automáticos ni respaldo de tarifas CFE. Ingeniería y cotización formal pendientes.']);
+    rows.push(['Nota', 'Precio de pallet de captura de pantalla 10-nov-2026; no es oferta vigente ni incluye IVA o envío. Dimensiones referenciales sujetas a ficha técnica; verificar diseño real del techo.']);
     const body = '\ufeff' + rows.map((r) => r.map(csvEscape).join(',')).join('\r\n');
     const blob = new Blob([body], {type:'text/csv;charset=utf-8'});
     const uri = URL.createObjectURL(blob);

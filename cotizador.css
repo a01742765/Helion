@@ -12,3 +12,18 @@
 .helion-planner .planner-purchase h3{color:#10273f}
 
 .planner-hero-cta{margin-top:19px;font-size:13px}.planner-hero-cta a{color:#c8eff0}.planner-hero-cta strong{display:inline-block;color:#f5b400;text-decoration:underline;text-underline-offset:4px}
+
+/* v2.2: dimensionamiento en techo y comparación de pallets */
+.planner-fields select{display:block;width:100%;min-width:0;padding:12px 13px;border:1px solid #cddfe8;border-radius:10px;color:#0a3a66;background:#f4f9fc;font:inherit;font-size:14px}
+.planner-fields select:focus{outline:2px solid #18b7b0}
+.planner-roof-snapshot{background:#154b64;border:1px solid #287b8b;padding:15px 17px;border-radius:14px;margin-top:16px}
+.planner-roof-snapshot strong{color:#ffe07d;font-size:13px}
+.planner-roof-snapshot p{margin:6px 0 0;color:#d8ecf0;font-size:12px;line-height:1.6}
+.planner-catalog{background:#fff;color:#10273f;border-radius:23px;padding:28px;margin-top:19px;box-shadow:0 25px 70px #010e1f48}
+.planner-catalog .planner-purchase-head h3{color:#10273f}
+.planner-catalog-badge{border-radius:12px;background:#eaf7f6;color:#067e86;font-size:11px;font-weight:850;padding:14px;text-align:center;min-width:143px}
+.planner-catalog-table{min-width:900px}
+.planner-catalog-table th:first-child{min-width:180px}
+.planner-catalog-table .is-recommended{background:#f0fbf5;box-shadow:inset 4px 0 #18b7b0}
+.planner-catalog-table .is-recommended td:first-child{font-weight:800;color:#0a3a66}
+@media(max-width:760px){.planner-catalog{padding:19px}.planner-catalog-badge{display:none}}
