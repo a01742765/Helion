@@ -55,7 +55,7 @@
         });
       });
     }, { rootMargin: '-22% 0px -55% 0px', threshold: 0 });
-    ['inicio', 'solucion', 'proceso', 'identidad'].forEach((id) => {
+    ['inicio', 'solucion', 'proceso', 'identidad', 'ecosistema'].forEach((id) => {
       const section = document.getElementById(id);
       if (section) sectionObserver.observe(section);
     });

@@ -1,0 +1,87 @@
+/* HELION Solar v2.0 — diseño inmersivo, capa aditiva. La identidad original permanece. */
+:root { --ease-cinema: cubic-bezier(.22,.8,.22,1); }
+html { scroll-padding-top:90px; }
+body { overflow-x:clip; }
+.site-header { background:rgba(250,253,255,.93); border-bottom:1px solid rgba(255,255,255,.45); box-shadow:0 10px 42px rgba(2,29,52,.12); }
+.nav-links { gap:clamp(9px,1.5vw,25px); }
+.nav-atlas { border:1px solid rgba(24,183,176,.24); background:linear-gradient(120deg,#0A3A66,#0c5475); box-shadow:0 9px 22px rgba(10,58,102,.15); }
+.nav-atlas:hover { box-shadow:0 14px 28px rgba(10,58,102,.23); }
+.hero { min-height:calc(100svh - 86px); background:linear-gradient(94deg,rgba(3,17,34,.94) 0%,rgba(4,27,48,.86) 42%,rgba(6,30,50,.4) 100%),url('./assets/photography/solar.webp') center 54%/cover no-repeat; }
+.hero::before { width:850px; height:850px; left:23%; top:-65%; background:radial-gradient(circle,rgba(245,180,0,.19),transparent 60%); }
+.hero-inner { min-height:calc(100svh - 86px); padding-block:clamp(76px,11vh,128px) 108px; grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr); }
+.hero-copy { text-shadow:0 3px 24px rgba(0,0,0,.23); }
+.hero h1 { max-width:920px; font-size:clamp(4.4rem,7vw,7.4rem); line-height:.98; letter-spacing:-.075em; }
+.hero h1 span:not(.heading-dot) { display:block; color:#F5B400; }
+.hero-lead { max-width:570px; font-size:clamp(1.02rem,1.45vw,1.25rem); color:#e4f2f5; line-height:1.8; }
+.hero-photo-window { position:absolute; inset:11% 3% 11% 2%; border-radius:45% 45% 30% 30%; background:linear-gradient(160deg,rgba(245,180,0,.10),rgba(5,29,49,.5)), url('./assets/photography/solar.webp') center/cover; mask-image:radial-gradient(ellipse at center,#000 28%,rgba(0,0,0,.65) 52%,transparent 74%); filter:saturate(1.1); }
+.hero-illustration { z-index:2; position:relative; filter:drop-shadow(0 25px 55px rgba(1,14,27,.7)); }
+.orbit-label { z-index:3; }
+.solar-scroll-cue { position:absolute;bottom:27px;left:max(4vw,25px);color:white;z-index:4;font-size:10px;font-weight:800;letter-spacing:.17em;display:flex;gap:17px;align-items:center; }
+.solar-scroll-cue span {font-size:28px;color:var(--gold);animation:solar-bob 1.7s ease-in-out infinite}
+@keyframes solar-bob{50%{transform:translateY(8px)}}
+/* Scroll narrative: three real, full-viewport scenes */
+.solar-journey { position:relative; height:auto; background:#061D36; color:white; }
+.solar-story-sticky {height:auto;min-height:88svh;position:relative;overflow:hidden;isolation:isolate;}
+.solar-story-imagery,.solar-story-image,.solar-story-shade,.solar-story-grid {position:absolute;inset:0;width:100%;height:100%;}
+.solar-story-image {object-fit:cover;transition:opacity 1s var(--ease-cinema),transform 1.35s var(--ease-cinema);}
+.solar-story-image--solar {opacity:1;transform:scale(1.03)}
+.solar-story-image--grid {opacity:0;transform:scale(1.13)}
+.solar-story-shade {background:linear-gradient(90deg,rgba(4,17,33,.93),rgba(4,21,38,.46) 67%,rgba(4,21,38,.3)),linear-gradient(0deg,rgba(2,12,25,.52),transparent 50%);}
+.solar-story-grid {opacity:.12;background-image:linear-gradient(rgba(214,245,252,.28) 1px,transparent 1px),linear-gradient(90deg,rgba(214,245,252,.28) 1px,transparent 1px);background-size:90px 90px;}
+.solar-story-frame {position:relative;z-index:3;display:flex;flex-direction:column;min-height:88svh;justify-content:space-between;padding-block:38px 50px;}
+.solar-story-topline,.solar-story-bottom {display:flex;align-items:center;justify-content:space-between;gap:18px;color:#d7e9f2;font-size:11px;letter-spacing:.16em;font-weight:800;}
+.solar-story-topline #story-count {color:var(--gold);}
+.solar-story-step {position:relative;max-width:830px;min-height:300px;padding-block:70px;}
+.solar-story-step h2 {font-size:clamp(3.1rem,7vw,7.6rem);line-height:1;letter-spacing:-.076em;max-width:860px;margin:21px 0 24px;}
+.solar-story-step h2 em {color:var(--gold);font-style:normal}
+.solar-story-step p {font-size:clamp(16px,1.55vw,22px);max-width:630px;line-height:1.7;color:#ddecf5;}
+.solar-story-kicker {color:#51dbd1;font-weight:900;font-size:11px;letter-spacing:.19em}
+.solar-story-link {display:inline-flex;align-items:center;gap:25px;margin-top:16px;background:var(--gold);color:#09263e;padding:15px 23px;border-radius:12px;font-weight:800;box-shadow:0 16px 36px rgba(245,180,0,.19);transition:transform .2s,box-shadow .2s}
+.solar-story-link:hover {transform:translateY(-3px);box-shadow:0 20px 40px rgba(245,180,0,.3)}
+.solar-story-meter {height:4px;width:min(240px,32vw);background:rgba(255,255,255,.28);border-radius:8px;overflow:hidden}
+.solar-story-meter span {display:block;height:100%;width:33.333%;background:var(--gold);border-radius:8px;transition:width .4s ease}
+/* JS-enabled immersive layout; graceful fallback shows the three stories as regular cards */
+html.js-solar-story .solar-journey {height:290svh;}
+html.js-solar-story .solar-story-sticky {position:sticky;top:86px;height:calc(100svh - 86px);min-height:580px}
+html.js-solar-story .solar-story-frame {min-height:100%;height:100%;padding-block:34px 34px;}
+html.js-solar-story .solar-story-step {position:absolute;top:50%;left:0;transform:translateY(-40%) translateY(24px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s var(--ease-cinema),transform .8s var(--ease-cinema),visibility .7s;}
+html.js-solar-story .solar-story-step.is-current {opacity:1;visibility:visible;pointer-events:auto;transform:translateY(-50%)}
+html.js-solar-story .solar-story-image--solar {transform:scale(calc(1.04 + var(--story-p,0) * .13));}
+html.js-solar-story .solar-journey[data-step="2"] .solar-story-image--grid {opacity:1;transform:scale(1.02);}
+html.js-solar-story .solar-journey[data-step="2"] .solar-story-image--solar {opacity:0;}
+html.js-solar-story .solar-journey[data-step="1"] .solar-story-image--solar {filter:saturate(.86) brightness(.8);}
+.solar-feature-photo {height:clamp(390px,52vw,645px);position:relative;overflow:hidden;margin:0 0 46px;border-radius:26px;background:#061D36;box-shadow:0 35px 65px rgba(4,30,55,.17);}
+.solar-feature-photo>img {height:100%;width:100%;object-fit:cover;transition:transform 1.2s var(--ease-cinema)}
+.solar-feature-photo:hover>img {transform:scale(1.045)}
+.solar-feature-photo::after {position:absolute;inset:0;content:"";background:linear-gradient(0deg,rgba(4,18,35,.87),transparent 72%)}
+.solar-feature-overlay {position:absolute;z-index:2;left:clamp(24px,5vw,70px);right:24px;bottom:clamp(28px,5vw,70px);color:white;}
+.solar-feature-overlay span {display:block;color:#5be1d5;font-size:11px;letter-spacing:.2em;font-weight:800;margin-bottom:14px}
+.solar-feature-overlay strong {display:block;font-size:clamp(31px,5vw,66px);max-width:700px;line-height:1;letter-spacing:-.055em}
+.solar-feature-overlay p {color:#cfe4ed;font-size:12px;margin:16px 0 0}
+.process-section {background:linear-gradient(96deg,rgba(5,24,44,.97),rgba(5,28,49,.9)),url('./assets/photography/solar.webp') center/cover fixed;}
+/* Project portal */
+.helion-hub {background:#061b31;color:white;padding-block:clamp(85px,9vw,148px)}
+.helion-hub-head {max-width:900px;margin-bottom:38px}
+.helion-hub-head .kicker {color:#4be2d6;letter-spacing:.16em;font-size:11px;font-weight:900}
+.helion-hub-head h2 {font-size:clamp(43px,6vw,86px);letter-spacing:-.06em;margin:16px 0;line-height:1.02}
+.helion-hub-head em {font-style:normal;color:var(--gold)}
+.helion-hub-head p {color:#c4dbe8;font-size:clamp(14px,1.5vw,20px);max-width:760px;line-height:1.7}
+.helion-hub-grid {display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.helion-project {height:clamp(430px,43vw,560px);border-radius:25px;overflow:hidden;position:relative;background:#10273f;box-shadow:0 28px 70px rgba(0,0,0,.25)}
+.helion-project img {width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease-cinema)}
+.helion-project:hover img {transform:scale(1.07)}
+.helion-project::after {content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(2,15,29,.95),rgba(5,27,49,.26) 70%)}
+.helion-project-content {position:absolute;bottom:0;left:0;right:0;padding:clamp(25px,4vw,46px);color:white;z-index:1}
+.helion-project-content>span {color:#56e0d4;letter-spacing:.17em;font-size:11px;font-weight:900}
+.helion-project-content h3 {font-size:clamp(28px,3vw,48px);line-height:1.05;letter-spacing:-.05em;margin:16px 0}
+.helion-project-content p {max-width:480px;color:#dcebf4;line-height:1.65;font-size:14px}
+.helion-project-content a {display:inline-flex;gap:22px;background:#f5b400;color:#09243c;padding:12px 17px;border-radius:12px;font-size:13px;font-weight:850;margin-top:9px;transition:transform .2s}
+.helion-project-content a:hover {transform:translateY(-3px)}
+.footer-external {display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:12px;font-weight:700}
+.footer-external>a:not(.back-to-top) {color:#0A3A66;text-decoration:underline;text-underline-offset:3px}
+html.has-cinema-motion .cinema-reveal {opacity:0;transform:translateY(34px);transition:opacity .85s var(--ease-cinema),transform .85s var(--ease-cinema)}
+html.has-cinema-motion .cinema-reveal.is-revealed {opacity:1;transform:translateY(0)}
+@media(max-width:1130px) {.nav-links{gap:14px}.nav-atlas{padding-inline:12px}.hero h1{font-size:clamp(3.7rem,6.7vw,6.5rem)}}
+@media(max-width:900px){.hero{min-height:calc(100svh - 76px)}.hero-inner{grid-template-columns:1fr;min-height:calc(100svh - 76px);padding-block:85px 95px}.hero-copy{max-width:690px}.hero-visual{position:absolute;inset:0 -35% 0 29%;opacity:.32;pointer-events:none}.hero h1{font-size:clamp(3.5rem,9vw,6.1rem)}.helion-hub-grid{grid-template-columns:1fr}.helion-project{height:500px}.solar-story-sticky,.solar-story-frame{min-height:700px}html.js-solar-story .solar-story-sticky{top:76px;height:calc(100svh - 76px)}}
+@media(max-width:600px){.container{width:calc(100% - 36px)}.hero{min-height:calc(100svh - 65px);background-position:57% center}.hero-inner{min-height:calc(100svh - 65px);padding-block:80px 120px}.hero h1{font-size:clamp(3.1rem,12vw,5.2rem)}.hero-lead{font-size:15px}.hero-visual{inset:14% -60% 0 15%;opacity:.18}.solar-scroll-cue{left:20px}.solar-story-frame{padding-block:25px;min-height:700px}.solar-story-step{padding-block:26px}.solar-story-step h2{font-size:clamp(3.0rem,11vw,5rem)}html.js-solar-story .solar-story-sticky{top:65px;height:calc(100svh - 65px);min-height:580px}html.js-solar-story .solar-story-step{right:0}.solar-story-topline,.solar-story-bottom{font-size:9px}.solar-story-meter{width:105px}.solar-feature-photo{height:460px;border-radius:18px}.helion-hub-grid{gap:14px}.helion-project{height:480px;border-radius:20px}.footer-external{gap:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.solar-scroll-cue span,.solar-story-image,.solar-feature-photo img,.helion-project img{animation:none!important;transition:none!important}.cinema-reveal{opacity:1!important;transform:none!important}.process-section{background-attachment:scroll}}

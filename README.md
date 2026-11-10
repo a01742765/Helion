@@ -1,45 +1,22 @@
-# HELION — Landing page para GitHub Pages
+# HELION Solar · Experiencia inmersiva v2.0
 
-**Lema original solicitado:** “Inovacion solar al alcance de tus manos”.
+Sitio original HELION, rediseñado visualmente sin convertir las funciones solares planeadas en funcionalidades simuladas. Conserva la identidad de HELION e incorpora una portada fotográfica, tres escenas narrativas durante el scroll, navegación responsiva, una fotografía editorial y un portal hacia el Atlas Eléctrico.
 
-Esta es una página de presentación **estática, responsiva y funcional**. El simulador fotovoltaico aún está en desarrollo; la landing explica la visión del proyecto, sin mostrar cálculos inventados ni botones sin destino.
+**Sitio solar:** https://a01742765.github.io/Helion/
 
-## Archivos
+**Atlas Eléctrico:** https://a01742765.github.io/Helion-Atlas-Electrico/
 
-```text
-HELION_Landing_GitHub_Pages/
-├── index.html              ← Página inicial que abre GitHub Pages
-├── styles.css              ← Diseño y versiones móvil / escritorio
-├── script.js               ← Menú móvil, indicadores y animaciones
-├── .nojekyll               ← Evita procesamiento innecesario
-└── assets/
-    ├── logo-horizontal.svg ← Logo oficial A del kit de HELION
-    ├── logo-principal.svg
-    ├── isotipo.svg
-    ├── solar-visual.svg     ← Ilustración original del encabezado
-    ├── favicon.ico
-    └── apple-touch-icon.png
-```
+## Archivos nuevos
+- `immersive-solar.css`: capa visual; conserva el CSS original.
+- `immersive-solar.js`: escena sticky controlada por scroll, transiciones y accesibilidad.
+- `assets/photography/`: fotografías de referencia con créditos en `CREDITOS_FOTOGRAFIAS.md`.
 
-## Publicarlo paso a paso
+## Cómo probar
+1. Abre terminal en la carpeta que contiene `index.html`.
+2. Ejecuta `python -m http.server 8000`.
+3. Abre `http://localhost:8000`.
+4. Recorre el inicio, las tres escenas de scroll, el bloque Ecosistema y el menú móvil.
+5. Comprueba el enlace al Atlas. El sitio del Atlas aún requiere incorporar el enlace de regreso mediante el parche independiente.
 
-1. En [github.com](https://github.com/) crea un repositorio nuevo, por ejemplo **helion-solar**. Puede ser público.
-2. Abre el repositorio, usa **Add file → Upload files** y sube el **contenido de esta carpeta**, no el ZIP como un único archivo. `index.html` debe quedar en la raíz y `assets/` debe conservar su estructura.
-3. Confirma los cambios (**Commit changes**) en la rama `main`.
-4. Ve a **Settings → Pages**.
-5. En **Build and deployment**, selecciona **Deploy from a branch**.
-6. Elige rama **main**, carpeta **/(root)** y guarda (**Save**).
-7. Cuando termine la publicación, la dirección normalmente será `https://TU-USUARIO.github.io/helion-solar/`. GitHub también mostrará la URL exacta en **Settings → Pages**.
-
-No necesitas instalar Node, npm, ni ninguna librería. Las rutas de las imágenes son relativas, así que sirven tanto en un dominio propio como en una URL de proyecto de GitHub Pages.
-
-## Editar texto y colores
-
-- Textos: `index.html`
-- Colores: al inicio de `styles.css` en las variables `--blue`, `--gold`, `--teal`, etc.
-- Imágenes y logos: carpeta `assets/`
-- Comportamiento del menú: `script.js`
-
-Para ver una vista previa sin subir nada, abre `index.html` en Chrome, Edge o Firefox.
-
-**Importante:** la frase quedó exactamente como la proporcionaste. Si deseas corregirla ortográficamente en el futuro, cámbiala por “Innovación solar al alcance de tus manos” en `index.html`.
+## Nota
+Esta es una **vista previa para revisión**. No se ha modificado GitHub. La página solar continúa siendo una presentación; el dimensionador y cotizador fotovoltaico no están operativos.
