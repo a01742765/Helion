@@ -15,8 +15,10 @@
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./immersive-solar.css?v=20">
+  <link rel="stylesheet" href="./cotizador.css?v=21">
   <script src="./script.js" defer></script>
   <script src="./immersive-solar.js?v=20" defer></script>
+  <script src="./cotizador.js?v=21" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -35,6 +37,7 @@
         <a href="#solucion" class="nav-link">La solución</a>
         <a href="#proceso" class="nav-link">Cómo funciona</a>
         <a href="#identidad" class="nav-link">Nuestra esencia</a>
+        <a href="#cotizador" class="nav-link">Cotizador</a>
         <a href="#ecosistema" class="nav-link">Ecosistema</a>
         <a href="https://a01742765.github.io/Helion-Atlas-Electrico/" class="nav-cta nav-atlas" aria-label="Abrir HELION Atlas Eléctrico de México">Explorar Atlas <span aria-hidden="true">↗</span></a>
       </nav>
@@ -54,6 +57,7 @@
             <a class="button button-primary" href="#viaje">Vive la experiencia <span aria-hidden="true">↓</span></a>
             <a class="button button-text" href="https://a01742765.github.io/Helion-Atlas-Electrico/"><span class="button-play" aria-hidden="true">↗</span> Explorar Atlas Eléctrico</a>
           </div>
+          <p class="planner-hero-cta"><a href="#cotizador">¿Cuántos paneles y equipos necesito? <strong>Calcula tu sistema solar ↗</strong></a></p>
           <div class="hero-footnote"><span class="tiny-line" aria-hidden="true"></span> INGENIERÍA SOLAR CLARA Y CONFIABLE · HELION LAB</div>
         </div>
         <div class="hero-visual" aria-label="Ilustración de energía solar y tecnología">
@@ -152,7 +156,7 @@
             <div class="feature-bottom"><span>Decisiones informadas</span><span aria-hidden="true">↗</span></div>
           </article>
         </div>
-        <p class="development-note"><span class="development-note-dot" aria-hidden="true"></span> <strong>Actualmente en desarrollo.</strong> Estas funciones describen el objetivo de la plataforma y se incorporarán durante el proyecto.</p>
+        <p class="development-note"><span class="development-note-dot" aria-hidden="true"></span> <strong>En desarrollo por etapas.</strong> Ya puedes explorar un dimensionamiento y una lista de materiales preliminares. La selección comercial definitiva y la cotización vinculante aún requieren un instalador.</p>
       </div>
     </section>
 
@@ -196,13 +200,83 @@
     </section>
 
 
+    <section id="cotizador" class="helion-planner section" aria-labelledby="planner-title">
+      <div class="container">
+        <div class="planner-heading cinema-reveal">
+          <div><span class="planner-kicker">HELION LAB / ETAPA FUNCIONAL</span><h2 id="planner-title">Tu sistema solar es <em>mucho más que paneles.</em></h2><p>Explora qué equipos necesita tu instalación, compara tres configuraciones y genera una lista de materiales para pedir cotizaciones reales.</p></div>
+          <div class="planner-fact"><span>3</span><small>configuraciones<br>de energía solar</small></div>
+        </div>
+        <div class="planner-system-grid" id="planner-system-grid" role="radiogroup" aria-label="Tipo de sistema fotovoltaico">
+          <label class="planner-system-card is-selected"><input type="radio" name="planner-mode" value="on-grid" checked><span class="psc-number">01</span><span class="psc-icon" aria-hidden="true">☀</span><strong>Interconectado</strong><small>Para reducir consumo de la red. No requiere batería.</small><em>Con CFE · sin respaldo</em></label>
+          <label class="planner-system-card"><input type="radio" name="planner-mode" value="hybrid"><span class="psc-number">02</span><span class="psc-icon" aria-hidden="true">◈</span><strong>Híbrido</strong><small>Paneles, red y baterías para cargas críticas.</small><em>Con CFE · respaldo configurado</em></label>
+          <label class="planner-system-card"><input type="radio" name="planner-mode" value="off-grid"><span class="psc-number">03</span><span class="psc-icon" aria-hidden="true">⌁</span><strong>Aislado</strong><small>Para sitios sin suministro de CFE.</small><em>Sin CFE · almacenamiento</em></label>
+        </div>
+        <div class="planner-layout">
+          <form id="planner-form" class="planner-form" novalidate>
+            <div class="planner-panel-top"><span>01 / TUS NECESIDADES</span><strong>Dimensionamiento orientativo</strong></div>
+            <div class="planner-fields">
+              <label>Consumo del recibo <span>kWh / bimestre</span><input id="p-consumption" type="number" min="10" max="25000" step="10" value="600" required></label>
+              <label>Potencia del panel <span>W por módulo</span><input id="p-module-w" type="number" min="100" max="800" step="10" value="550" required></label>
+              <label>Horas solares pico <span>h/día · debes verificarlas localmente</span><input id="p-sun" type="number" min="2" max="8" step="0.1" value="4.5" required></label>
+              <label>Rendimiento global <span>PR · pérdidas aproximadas</span><input id="p-pr" type="number" min="0.5" max="0.95" step="0.01" value="0.80" required></label>
+              <div class="planner-conditional" id="planner-backup-fields" hidden>
+                <label>Potencia de cargas críticas <span>W simultáneos</span><input id="p-critical-w" type="number" min="100" max="20000" step="100" value="1500"></label>
+                <label id="p-hours-wrap">Horas de respaldo <span>h</span><input id="p-backup-hours" type="number" min="1" max="72" step="1" value="4"></label>
+                <label id="p-days-wrap" hidden>Días de autonomía <span>días sin aporte solar</span><input id="p-offgrid-days" type="number" min="1" max="5" step="1" value="1"></label>
+              </div>
+            </div>
+            <p class="planner-input-note">El valor de 4.5 horas de sol y el rendimiento 0.80 son <strong>supuestos editables de demostración</strong>, no datos medidos para tu domicilio. No equivalen a una ingeniería de instalación.</p>
+            <button type="submit" class="planner-compute">Calcular mi propuesta preliminar <span aria-hidden="true">↗</span></button>
+            <p id="planner-error" class="planner-error" role="alert" hidden></p>
+          </form>
+          <div id="planner-results" class="planner-result" aria-live="polite">
+            <div class="planner-panel-top"><span>02 / RESULTADO</span><strong id="p-result-title">Sistema interconectado</strong></div>
+            <div class="planner-stats">
+              <div><span>Paneles recomendados</span><strong id="p-panels">—</strong><small>módulos</small></div>
+              <div><span>Potencia FV</span><strong id="p-kwp">—</strong><small>kWp DC</small></div>
+              <div><span>Producción orientativa</span><strong id="p-gen">—</strong><small>kWh / 60 días</small></div>
+              <div><span>Batería aproximada</span><strong id="p-battery">—</strong><small>kWh nominales</small></div>
+            </div>
+            <div class="planner-energy-path" aria-label="Componentes del sistema"><span class="pep-sun">☀ <small>Paneles</small></span><b aria-hidden="true">→</b><span>▣ <small>Inversor</small></span><b aria-hidden="true">→</b><span>⌂ <small>Consumo</small></span><b aria-hidden="true" id="p-path-arrow">↔</b><span id="p-path-last">⇄ <small>Red CFE</small></span></div>
+            <p id="p-overview" class="planner-overview">Los resultados son preliminares y necesitan verificación técnica.</p>
+            <div class="planner-alert"><strong>El dato que debes conocer</strong><p id="p-alert">La energía sobrante puede entregarse a la red si existe un contrato de interconexión válido. Un sistema on-grid normal no garantiza energía durante apagones.</p></div>
+            <a href="#p-materials-title" class="planner-link">Revisar todos los equipos y costos <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+        <div class="planner-purchase cinema-reveal" id="p-materials-panel">
+          <div class="planner-purchase-head"><div><span class="planner-kicker">03 / ALCANCE REAL DE LA INSTALACIÓN</span><h3 id="p-materials-title">Todo lo que debe incluir una cotización.</h3><p>Introduce precios unitarios <strong>recibidos de proveedores</strong> para calcular un presupuesto. HELION no inventa precios ni promete disponibilidad.</p></div><div class="planner-purchase-actions"><button type="button" id="p-download" class="planner-secondary">Descargar lista CSV</button><button type="button" id="p-print" class="planner-secondary">Imprimir / Guardar PDF</button></div></div>
+          <div class="planner-table-wrap"><table class="planner-table"><thead><tr><th scope="col">Equipo o servicio</th><th scope="col">Cantidad</th><th scope="col">Precio unitario (MXN)</th><th scope="col">Importe (MXN)</th></tr></thead><tbody id="p-items"></tbody></table></div>
+          <div class="planner-total"><span id="p-total-info">Sin precios capturados: cotización pendiente</span><strong id="p-total">Cotización pendiente</strong></div>
+          <p class="planner-input-note">Importes capturados por el usuario: no son ofertas comerciales ni incluyen automáticamente IVA, envío, permisos, adecuaciones, garantías o mano de obra salvo que se registren. El total solo será una cotización completa cuando todos los renglones tengan precios confirmados.</p>
+        </div>
+        <div class="planner-learn" aria-labelledby="p-learn-title">
+          <div class="planner-learn-head"><span class="planner-kicker">NO ES SOLO COMPRAR PANELES</span><h3 id="p-learn-title">¿Qué hace cada parte del sistema?</h3></div>
+          <div class="planner-learn-grid">
+            <article><span>01</span><h4>Paneles y estructura</h4><p>Convierten radiación solar en corriente continua. Rieles, anclajes, abrazaderas y sellado sujetan el arreglo con seguridad.</p></article>
+            <article><span>02</span><h4>Inversor y monitoreo</h4><p>Convierten la energía a corriente alterna compatible con el uso del inmueble. La selección eléctrica depende de fichas técnicas y del servicio.</p></article>
+            <article><span>03</span><h4>Protecciones y cableado</h4><p>Conductores, conectores, seccionamiento, protecciones CA/CC, sobretensiones y puesta a tierra forman parte del sistema; no son accesorios opcionales genéricos.</p></article>
+            <article><span>04</span><h4>Baterías y respaldo</h4><p>Almacenan energía; para respaldo también se requiere electrónica compatible, sistema de gestión y cargas críticas separadas, según el diseño.</p></article>
+            <article><span>05</span><h4>Medición e interconexión</h4><p>En sistemas conectados, la distribuidora instala el equipo de medición correspondiente tras el proceso de interconexión. No se compra un medidor privado como sustituto.</p></article>
+            <article><span>06</span><h4>Instalación y puesta en marcha</h4><p>La cotización debe contemplar visita técnica, ingeniería, instalación por personal competente, pruebas, documentación, garantías y mantenimiento.</p></article>
+          </div>
+        </div>
+        <div class="planner-suppliers" aria-labelledby="p-sup-title"><div><span class="planner-kicker">04 / PROVEEDORES DOCUMENTADOS</span><h3 id="p-sup-title">Solicita precios reales.</h3><p>Son distribuidores con catálogo para México. Algunos trabajan principalmente con instaladores o integradores: no representan cotizaciones emitidas por HELION.</p></div><div class="planner-supplier-grid">
+          <a href="https://www.exelsolar.mx/" target="_blank" rel="noopener noreferrer"><strong>Exel Solar</strong><small>Paneles, inversores, baterías, protecciones, montaje y tienda de cotizaciones</small><b>Consultar proveedor ↗</b></a>
+          <a href="https://www.syscom.mx/p/syscom-solar" target="_blank" rel="noopener noreferrer"><strong>SYSCOM Solar</strong><small>Generación, conversión, almacenamiento, obra, protecciones y lista de materiales</small><b>Ver soluciones ↗</b></a>
+          <a href="https://ecommerce.solar-center.mx/" target="_blank" rel="noopener noreferrer"><strong>Solar Center</strong><small>Catálogo de módulos, inversores, estructuras, almacenamiento y accesorios</small><b>Ver catálogo ↗</b></a>
+          <a href="https://krannich-solar.com/mx-es/" target="_blank" rel="noopener noreferrer"><strong>Krannich Solar</strong><small>Distribución de material fotovoltaico para integradores profesionales</small><b>Conocer opciones ↗</b></a>
+        </div></div>
+        <div class="planner-disclaimer"><strong>Fuentes oficiales:</strong> <a href="https://www.gob.mx/cne/es/articulos/preguntas-frecuentes-sobre-generacion-distribuida-406238" target="_blank" rel="noopener noreferrer">CNE · Generación distribuida ↗</a> · <a href="https://www.cfe.gob.mx/hogar/infcliente/Documents/contratacionconinterconexion.pdf" target="_blank" rel="noopener noreferrer">Consulta requisitos CFE ↗</a> · <a href="https://sidof.segob.gob.mx/notas/docFuente/5280619" target="_blank" rel="noopener noreferrer">NOM-001-SEDE-2012, art. 690 ↗</a>.<br>Este estimador es educativo. No sustituye una visita técnica, cotización firmada, ingeniería de protecciones, aprobación CFE ni asesoría profesional.</div>
+      </div>
+    </section>
+
     <section class="helion-hub section" id="ecosistema" aria-labelledby="ecosistema-title">
       <div class="container">
         <div class="helion-hub-head cinema-reveal"><span class="kicker">UN MISMO NOMBRE · DOS EXPERIENCIAS</span><h2 id="ecosistema-title">Explora el universo <em>HELION.</em></h2><p>Una identidad de ingeniería y dos formas de descubrir la energía: nuestra visión solar y el sistema eléctrico de México.</p></div>
         <div class="helion-hub-grid">
           <article class="helion-project helion-project--solar cinema-reveal">
             <img src="./assets/photography/solar.webp" alt="Parque solar fotovoltaico" loading="lazy" decoding="async" width="1600" height="900">
-            <div class="helion-project-content"><span>01 / HELION SOLAR</span><h3>Diseñando el futuro solar.</h3><p>La propuesta de ingeniería fotovoltaica que dio origen a HELION. El dimensionador y cotizador están en desarrollo.</p><a href="#solucion">Conoce el proyecto <span aria-hidden="true">↗</span></a></div>
+            <div class="helion-project-content"><span>01 / HELION SOLAR</span><h3>Diseñando el futuro solar.</h3><p>La propuesta de ingeniería fotovoltaica que dio origen a HELION. El estimador preliminar y la lista de materiales ya están disponibles; la cotización formal requiere un instalador.</p><a href="#cotizador">Explora el estimador <span aria-hidden="true">↗</span></a></div>
           </article>
           <article class="helion-project helion-project--atlas cinema-reveal">
             <img src="./assets/photography/transmission.webp" alt="Infraestructura de transmisión eléctrica" loading="lazy" decoding="async" width="1600" height="900">
